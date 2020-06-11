@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
-import { ToggleButton, ToggleButtonGroup, Row, Col, Dropdown, DropdownButton } from 'react-bootstrap'
-import device from '../data/device.json'
 
 export default class Charts extends Component {
     constructor(props) {

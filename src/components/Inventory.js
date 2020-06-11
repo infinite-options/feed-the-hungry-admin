@@ -55,6 +55,68 @@ export default class Inventory extends Component {
             data: data
         })
     }
+
+    low = async () => {
+        var resp = []
+        var data = []
+        await axios.get(`${this.state.base}low`)
+            .then(response => {
+                resp = response.data.result.result
+                console.log(resp);
+            })
+            .catch(error => console.log(error)
+            )
+
+
+        resp.map(object => {
+            data.push({
+                name: object.fl_name,
+                excess: object.excess,
+                quantity: object.inv_qty
+            })
+        })
+
+        const columns = [
+            { field: 'name', headerName: 'Name', sortable: true, unSortIcon: true, filter: true, width: 450 },
+            { field: 'excess', headerName: 'Low', sortable: true, unSortIcon: true, filter: true, width: 300 },
+            { field: 'quantity', headerName: 'Quantity', sortable: true, unSortIcon: true, filter: true, width: 300 },
+        ]
+
+        this.setState({
+            ...this.state,
+            columns: columns,
+            data: data
+        })
+    }
+
+    zero = async () => {
+        var resp = []
+        var data = []
+        await axios.get(`${this.state.base}zero`)
+            .then(response => {
+                resp = response.data.result.result
+                console.log(resp);
+            })
+            .catch(error => console.log(error)
+            )
+
+
+        resp.map(object => {
+            data.push({
+                name: object.fl_name,
+            })
+        })
+
+        const columns = [
+            { field: 'name', headerName: 'Name', sortable: true, unSortIcon: true, filter: true, width: 450 },
+        ]
+
+        this.setState({
+            ...this.state,
+            columns: columns,
+            data: data
+        })
+    }
     
     updateSearch = state => {
         this.setState({
@@ -74,6 +136,7 @@ export default class Inventory extends Component {
                         <ToggleButtonGroup type="radio" name="options" defaultValue={1}>
                             <ToggleButton value={1} style={{ fontSize: 15 }} onClick={() => this.excess()}>Excess</ToggleButton>
                             <ToggleButton value={2} style={{ fontSize: 15 }} onClick={() => this.low()}>Low</ToggleButton>
+                            <ToggleButton value={2} style={{ fontSize: 15 }} onClick={() => this.zero()}>Zero</ToggleButton>
                         </ToggleButtonGroup>
                     </Col>
                 </Row>
