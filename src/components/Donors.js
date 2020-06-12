@@ -17,13 +17,27 @@ export default class Donors extends Component {
             title: '',
             xaxis: '',
             yaxis: '',
-            graph: ''
+            graph: '',      
+            search_st: new Date('2016-01-01'),
+            search_et: new Date(),
         }
     }
 
 
     componentDidMount = () => {
         this.donordonation()
+    }
+
+    updateDate = async (data) => {
+        const start_date = new Date(this.state.search_st)
+        const end_date = new Date(this.state.search_et)
+        
+        const temp =  data.filter(obj => {
+            const obj_date = new Date(obj.donation_date)
+            console.log(obj_date);
+            return (obj_date >= start_date && obj_date <= end_date)
+          })
+        return temp
     }
 
     donordonation = async () => {
@@ -37,7 +51,8 @@ export default class Donors extends Component {
             })
             .catch(error => console.log(error)
             )
-
+            
+        resp = await this.updateDate(resp)
         resp.sort((a, b) => (a.totalDonation < b.totalDonation) ? 1 : -1)
 
         resp.map(object => {
@@ -122,13 +137,16 @@ export default class Donors extends Component {
     }
 
 
-    updateSearch = state => {
+    updateSearch = async state => {
         this.setState({
             ...this.state,
             search_c: state.search_c,
             search_d: state.search_d,
             search_f: state.search_f,
+            search_st: state.search_st,
+            search_et: state.search_et
         })
+        await this.donordonation()
     }
 
 

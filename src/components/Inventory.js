@@ -108,7 +108,7 @@ export default class Inventory extends Component {
         })
 
         const columns = [
-            { field: 'name', headerName: 'Name', sortable: true, unSortIcon: true, filter: true, width: 450 },
+            { field: 'name', headerName: 'Name', sortable: true, unSortIcon: true, filter: true, width: 1050 },
         ]
 
         this.setState({
