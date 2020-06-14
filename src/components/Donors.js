@@ -26,8 +26,8 @@ export default class Donors extends Component {
     }
 
 
-    componentDidMount = () => {
-        this.donordonationbyname()
+    componentDidMount = async () => {
+        await this.donordonationbyname()
     }
 
     updateDate = async (data) => {
