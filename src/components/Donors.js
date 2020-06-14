@@ -17,30 +17,31 @@ export default class Donors extends Component {
             title: '',
             xaxis: '',
             yaxis: '',
-            graph: '',      
+            graph: '',
             search_st: new Date('2016-01-01'),
             search_et: new Date(),
+            mode: '1',
+            dd: 'byname'
         }
     }
 
 
     componentDidMount = () => {
-        this.donordonation()
+        this.donordonationbyname()
     }
 
     updateDate = async (data) => {
         const start_date = new Date(this.state.search_st)
         const end_date = new Date(this.state.search_et)
-        
-        const temp =  data.filter(obj => {
+
+        const temp = data.filter(obj => {
             const obj_date = new Date(obj.donation_date)
-            console.log(obj_date);
             return (obj_date >= start_date && obj_date <= end_date)
-          })
+        })
         return temp
     }
 
-    donordonation = async () => {
+    donordonationbyname = async () => {
         var resp = []
         var xaxis = []
         var data = []
@@ -51,7 +52,7 @@ export default class Donors extends Component {
             })
             .catch(error => console.log(error)
             )
-            
+
         resp = await this.updateDate(resp)
         resp.sort((a, b) => (a.totalDonation < b.totalDonation) ? 1 : -1)
 
@@ -66,7 +67,44 @@ export default class Donors extends Component {
             xaxis: xaxis,
             yaxis: 'Donation in Rupees',
             title: 'Total Donations',
-            graph: 'bar'
+            graph: 'bar',
+            mode: '1',
+            dd: 'byname'
+        })
+    }
+
+    donordonationbydate = async () => {
+        var resp = []
+        var xaxis = []
+        var data = []
+        await axios.get(`${this.state.base}donordonation`)
+            .then(response => {
+                resp = response.data.result.result
+                console.log(resp);
+            })
+            .catch(error => console.log(error)
+            )
+
+        resp = await this.updateDate(resp)
+        
+        // const start_date = new Date(this.state.search_st)
+        // const end_date = new Date(this.state.search_et)
+        resp.sort((a, b) => (new Date(a.donation_date) > new Date(b.donation_date)) ? 1 : -1)
+
+        resp.map(object => {
+            xaxis.push(object['donation_date'].split(" ")[0])
+            data.push(object.totalDonation)
+        })
+
+        this.setState({
+            ...this.state,
+            data: data,
+            xaxis: xaxis,
+            yaxis: 'Donation in Rupees',
+            title: 'Total Donations',
+            graph: 'bar',
+            mode: '1',
+            dd: 'bydate'
         })
     }
 
@@ -100,7 +138,8 @@ export default class Donors extends Component {
             title: 'Total Donations by Type',
             xaxis: '',
             yaxis: '',
-            graph: 'pie'
+            graph: 'pie',
+            mode: '3'
         })
     }
 
@@ -132,8 +171,34 @@ export default class Donors extends Component {
             ...this.state,
             data: data,
             title: 'Total Donations by Number of Items',
-            graph: 'pie'
+            graph: 'pie',
+            mode: '2'
         })
+    }
+
+    changeMode = async (mode,dd) => {
+        switch (mode) {
+            case '1':
+                if (dd === 'byname') {
+                    await this.donordonationbyname()
+                }
+                else {
+                    await this.donordonationbydate()
+                }
+                break;
+            case '2':
+                await this.itemdonations()
+                break;
+            case '3':
+                await this.foodtypes()
+                break;
+            case '11':
+                await this.donordonationbyname()
+                break;
+            case '12':
+                await this.donordonationbydate()
+                break;
+        }
     }
 
 
@@ -146,7 +211,7 @@ export default class Donors extends Component {
             search_st: state.search_st,
             search_et: state.search_et
         })
-        await this.donordonation()
+        await this.changeMode(this.state.mode, this.state.dd)
     }
 
 
@@ -156,9 +221,9 @@ export default class Donors extends Component {
                 <Row>
                     <Col xs="5">
                         <ToggleButtonGroup type="radio" name="options" defaultValue={1}>
-                            <ToggleButton value={1} style={{ fontSize: 15 }} onClick={() => this.donordonation()}>Donor Donations</ToggleButton>
-                            <ToggleButton value={2} style={{ fontSize: 15 }} onClick={() => this.itemdonations()}>Item Donations</ToggleButton>
-                            <ToggleButton value={3} style={{ fontSize: 15 }} onClick={() => this.foodtypes()}>Food Types</ToggleButton>
+                            <ToggleButton value={1} style={{ fontSize: 15 }} onClick={(e) => this.changeMode(e.target.value)}>Donor Donations</ToggleButton>
+                            <ToggleButton value={2} style={{ fontSize: 15 }} onClick={(e) => this.changeMode(e.target.value)}>Item Donations</ToggleButton>
+                            <ToggleButton value={3} style={{ fontSize: 15 }} onClick={(e) => this.changeMode(e.target.value)}>Food Types</ToggleButton>
                         </ToggleButtonGroup>
                     </Col>
                 </Row>
@@ -167,7 +232,17 @@ export default class Donors extends Component {
                 </Row>
                 <Card style={{ padding: '10px' }}>
                     <Card>
-                        <Charts data={this.state.data} title={this.state.title} xaxis={this.state.xaxis} yaxis={this.state.yaxis} graph={this.state.graph} />
+                        {this.state.mode === '1'? 
+                        (<Row>
+                            <Col xs="12">
+                                <ToggleButtonGroup style={{margin: '5px'}} className="float-right" type="radio" name="options" defaultValue={11}>
+                                    <ToggleButton value={11} style={{ fontSize: 10 }} onClick={(e) => this.changeMode(e.target.value)}>By Name</ToggleButton>
+                                    <ToggleButton value={12} style={{ fontSize: 10 }} onClick={(e) => this.changeMode(e.target.value)}>By Date</ToggleButton>
+                                </ToggleButtonGroup>
+                            </Col>
+                        </Row>) : (<div></div>)}
+                            <Charts data={this.state.data} title={this.state.title} xaxis={this.state.xaxis} yaxis={this.state.yaxis} graph={this.state.graph} />
+                        
                     </Card>
                 </Card>
             </Card>
