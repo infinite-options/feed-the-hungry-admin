@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/infinite-options/feed-the-hungry-admin/static/css/main.25828032.chunk.css",
+    "main.js": "/infinite-options/feed-the-hungry-admin/static/js/main.6a99221d.chunk.js",
+    "main.js.map": "/infinite-options/feed-the-hungry-admin/static/js/main.6a99221d.chunk.js.map",
+    "runtime-main.js": "/infinite-options/feed-the-hungry-admin/static/js/runtime-main.c4ef286e.js",
+    "runtime-main.js.map": "/infinite-options/feed-the-hungry-admin/static/js/runtime-main.c4ef286e.js.map",
+    "static/css/2.daf8c292.chunk.css": "/infinite-options/feed-the-hungry-admin/static/css/2.daf8c292.chunk.css",
+    "static/js/2.0425823d.chunk.js": "/infinite-options/feed-the-hungry-admin/static/js/2.0425823d.chunk.js",
+    "static/js/2.0425823d.chunk.js.map": "/infinite-options/feed-the-hungry-admin/static/js/2.0425823d.chunk.js.map",
+    "index.html": "/infinite-options/feed-the-hungry-admin/index.html",
+    "precache-manifest.b331f0b0b2c62775cca1111789a1c337.js": "/infinite-options/feed-the-hungry-admin/precache-manifest.b331f0b0b2c62775cca1111789a1c337.js",
+    "service-worker.js": "/infinite-options/feed-the-hungry-admin/service-worker.js",
+    "static/css/2.daf8c292.chunk.css.map": "/infinite-options/feed-the-hungry-admin/static/css/2.daf8c292.chunk.css.map",
+    "static/css/main.25828032.chunk.css.map": "/infinite-options/feed-the-hungry-admin/static/css/main.25828032.chunk.css.map",
+    "static/js/2.0425823d.chunk.js.LICENSE.txt": "/infinite-options/feed-the-hungry-admin/static/js/2.0425823d.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c4ef286e.js",
+    "static/css/2.daf8c292.chunk.css",
+    "static/js/2.0425823d.chunk.js",
+    "static/css/main.25828032.chunk.css",
+    "static/js/main.6a99221d.chunk.js"
+  ]
+}
