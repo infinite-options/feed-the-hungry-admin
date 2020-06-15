@@ -226,7 +226,7 @@ export default class Donors extends Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Filter update={this.updateSearch} />
+                    <Filter update={this.updateSearch} ddlist={[]}/>
                 </Row>
                 <Card style={{ padding: '10px' }}>
                     <Card>
