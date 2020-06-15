@@ -15,12 +15,21 @@ export default class Inventory extends Component {
             search_d: '',
             search_f: '',
             data: [],
+            ddlist: []
+
         }
     }
 
 
     componentDidMount = () => {
         this.excess()
+    }
+
+    updateData = async (data) => {
+        const temp = data.filter(obj => {
+            return (obj.fb_name.indexOf(this.state.search_d) !== -1)
+        })
+        return temp
     }
 
     excess = async () => {
@@ -34,25 +43,30 @@ export default class Inventory extends Component {
             .catch(error => console.log(error)
             )
 
-
+        resp = await this.updateData(resp)
+            
+        var ddlist = []
         resp.map(object => {
+            if (!ddlist.includes(object.fb_name)) { ddlist.push(object.fb_name) }
             data.push({
                 name: object.fl_name,
-                excess: object.excess,
+                excess: object.inv_qty-object.excess,
                 quantity: object.inv_qty
             })
         })
 
         const columns = [
             { field: 'name', headerName: 'Name', sortable: true, unSortIcon: true, filter: true, width: 450 },
-            { field: 'excess', headerName: 'Excess', sortable: true, unSortIcon: true, filter: true, width: 300 },
+            { field: 'excess', headerName: 'Anticipated Usage', sortable: true, unSortIcon: true, filter: true, width: 300 },
             { field: 'quantity', headerName: 'Quantity', sortable: true, unSortIcon: true, filter: true, width: 300 },
         ]
 
         this.setState({
             ...this.state,
             columns: columns,
-            data: data
+            data: data,
+            mode: '1',
+            ddlist: ddlist
         })
     }
 
@@ -67,6 +81,7 @@ export default class Inventory extends Component {
             .catch(error => console.log(error)
             )
 
+        resp = await this.updateData(resp)
 
         resp.map(object => {
             data.push({
@@ -85,7 +100,8 @@ export default class Inventory extends Component {
         this.setState({
             ...this.state,
             columns: columns,
-            data: data
+            data: data,
+            mode: '2'
         })
     }
 
@@ -100,6 +116,7 @@ export default class Inventory extends Component {
             .catch(error => console.log(error)
             )
 
+        resp = await this.updateData(resp)
 
         resp.map(object => {
             data.push({
@@ -114,10 +131,27 @@ export default class Inventory extends Component {
         this.setState({
             ...this.state,
             columns: columns,
-            data: data
+            data: data,
+            mode: '3'
         })
     }
-    
+
+
+    changeMode = async (mode) => {
+        switch (mode) {
+            case '1':
+                await this.excess()
+                break;
+            case '2':
+                await this.low()
+                break;
+            case '3':
+                await this.zero()
+                break;
+        }
+    }
+
+
     updateSearch = state => {
         this.setState({
             ...this.state,
@@ -125,6 +159,7 @@ export default class Inventory extends Component {
             search_d: state.search_d,
             search_f: state.search_f,
         })
+        this.changeMode(this.state.mode)
     }
 
 
@@ -134,16 +169,18 @@ export default class Inventory extends Component {
                 <Row>
                     <Col xs="5">
                         <ToggleButtonGroup type="radio" name="options" defaultValue={1}>
-                            <ToggleButton value={1} style={{ fontSize: 15 }} onClick={() => this.excess()}>Excess</ToggleButton>
-                            <ToggleButton value={2} style={{ fontSize: 15 }} onClick={() => this.low()}>Low</ToggleButton>
-                            <ToggleButton value={2} style={{ fontSize: 15 }} onClick={() => this.zero()}>Zero</ToggleButton>
+                            <ToggleButton value={1} style={{ fontSize: 15 }} onClick={(e) => this.changeMode(e.target.value)}>Excess</ToggleButton>
+                            <ToggleButton value={2} style={{ fontSize: 15 }} onClick={(e) => this.changeMode(e.target.value)}>Low</ToggleButton>
+                            <ToggleButton value={3} style={{ fontSize: 15 }} onClick={(e) => this.changeMode(e.target.value)}>Zero</ToggleButton>
                         </ToggleButtonGroup>
                     </Col>
                 </Row>
-                <br></br>
+                <Row>
+                    <Filter update={this.updateSearch} ddlist={this.state.ddlist} />
+                </Row>
                 <Card style={{ padding: '10px' }}>
                     <Card>
-                        <Table columns={this.state.columns} data={this.state.data}/>
+                        <Table columns={this.state.columns} data={this.state.data} />
                     </Card>
                 </Card>
             </Card>

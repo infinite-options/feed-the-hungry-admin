@@ -87,8 +87,6 @@ export default class Donors extends Component {
 
         resp = await this.updateDate(resp)
         
-        // const start_date = new Date(this.state.search_st)
-        // const end_date = new Date(this.state.search_et)
         resp.sort((a, b) => (new Date(a.donation_date) > new Date(b.donation_date)) ? 1 : -1)
 
         resp.map(object => {

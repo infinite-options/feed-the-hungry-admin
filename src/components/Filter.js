@@ -26,6 +26,7 @@ export default class Filter extends Component {
       }
 
     render() {
+        console.log(this.props.data)
         return (
 
             <Card style={{ margin: '15px' }} >
@@ -34,13 +35,13 @@ export default class Filter extends Component {
                         <Row>
                             <Col xs={2} >
                                 <Form.Label>Name</Form.Label>
-                                <DropdownButton id="dropdown-basic-button" title={this.state.search_d || 'All Donors'} size="sm" variant="outline-secondary" size='md'>
+                                <DropdownButton id="dropdown-basic-button" title={this.state.search_d || 'All Banks'} size="sm" variant="outline-secondary" size='md'>
                                     <Dropdown.Item onClick={async () => {await this.setState({ ...this.state, search_d: '' }); this.props.update(this.state)}}>All</Dropdown.Item>
-                                    {/* {device.map(turbine => {
+                                    {this.props.ddlist.map(object => {
                                         return (
-                                            <Dropdown.Item onClick={async () => {await this.setState({ ...this.state, search_d: turbine.device_name }); this.props.update(this.state)}}>{turbine.device_name}</Dropdown.Item>
+                                            <Dropdown.Item onClick={async () => {await this.setState({ ...this.state, search_d: object }); this.props.update(this.state)}}>{object}</Dropdown.Item>
                                         )
-                                    })} */}
+                                    })}
                                 </DropdownButton>
                             </Col>
                             <Col xs={3}>
