@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "aca3446ac8c6b3fb0ebb56126c3392b9",
+    "revision": "77f65575c25ce3af0136ed94de9a7c6c",
     "url": "/feed-the-hungry-admin/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/feed-the-hungry-admin/static/css/2.daf8c292.chunk.css"
   },
   {
-    "revision": "566f735ba5f12b41fe1b",
+    "revision": "1a678e575cb85cb593a5",
     "url": "/feed-the-hungry-admin/static/css/main.25828032.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/feed-the-hungry-admin/static/js/2.50d63495.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "566f735ba5f12b41fe1b",
-    "url": "/feed-the-hungry-admin/static/js/main.a2beca0c.chunk.js"
+    "revision": "1a678e575cb85cb593a5",
+    "url": "/feed-the-hungry-admin/static/js/main.02f83fd5.chunk.js"
   },
   {
     "revision": "bc109f37e08d132ae832",
