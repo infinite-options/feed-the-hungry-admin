@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Row, Col, Card, Dropdown, DropdownButton, ToggleButton, ToggleButtonGroup } from 'react-bootstrap'
 import Table from './Table'
 import Filter from './Filter'
+import NavBar from './NavBar'
 import axios from 'axios'
 
 export default class Inventory extends Component {
@@ -15,8 +16,7 @@ export default class Inventory extends Component {
             search_d: '',
             search_f: '',
             data: [],
-            ddlist: []
-
+            banks: []
         }
     }
 
@@ -25,16 +25,10 @@ export default class Inventory extends Component {
         this.excess()
     }
 
-    updateData = async (data) => {
-        const temp = data.filter(obj => {
-            return (obj.fb_name.indexOf(this.state.search_d) !== -1)
-        })
-        return temp
-    }
-
     excess = async () => {
         var resp = []
         var data = []
+        var banks = []
         await axios.get(`${this.state.base}excess`)
             .then(response => {
                 resp = response.data.result.result
@@ -43,16 +37,14 @@ export default class Inventory extends Component {
             .catch(error => console.log(error)
             )
 
-        resp = await this.updateData(resp)
-            
-        var ddlist = []
         resp.map(object => {
-            if (!ddlist.includes(object.fb_name)) { ddlist.push(object.fb_name) }
-            data.push({
-                name: object.fl_name,
-                excess: object.inv_qty-object.excess,
-                quantity: object.inv_qty
-            })
+            if (!banks.includes(object.fb_name)) banks.push(object.fb_name)
+            if (object.fb_name === this.state.search_d || this.state.search_d === '')
+              data.push({
+                  name: object.fl_name,
+                  excess: object.inv_qty-object.excess,
+                  quantity: object.inv_qty
+              })
         })
 
         const columns = [
@@ -66,13 +58,14 @@ export default class Inventory extends Component {
             columns: columns,
             data: data,
             mode: '1',
-            ddlist: ddlist
+            banks: banks
         })
     }
 
     low = async () => {
         var resp = []
         var data = []
+        var banks = []
         await axios.get(`${this.state.base}low`)
             .then(response => {
                 resp = response.data.result.result
@@ -81,14 +74,15 @@ export default class Inventory extends Component {
             .catch(error => console.log(error)
             )
 
-        resp = await this.updateData(resp)
 
         resp.map(object => {
-            data.push({
-                name: object.fl_name,
-                excess: object.excess,
-                quantity: object.inv_qty
-            })
+            if (!banks.includes(object.fb_name)) banks.push(object.fb_name)
+            if (object.fb_name === this.state.search_d || this.state.search_d === '')
+              data.push({
+                  name: object.fl_name,
+                  excess: object.excess,
+                  quantity: object.inv_qty
+              })
         })
 
         const columns = [
@@ -101,13 +95,15 @@ export default class Inventory extends Component {
             ...this.state,
             columns: columns,
             data: data,
-            mode: '2'
+            mode: '2',
+            banks: banks
         })
     }
 
     zero = async () => {
         var resp = []
         var data = []
+        var banks = []
         await axios.get(`${this.state.base}zero`)
             .then(response => {
                 resp = response.data.result.result
@@ -116,12 +112,12 @@ export default class Inventory extends Component {
             .catch(error => console.log(error)
             )
 
-        resp = await this.updateData(resp)
-
         resp.map(object => {
-            data.push({
-                name: object.fl_name,
-            })
+            if (!banks.includes(object.fb_name)) banks.push(object.fb_name)
+            if (object.fb_name === this.state.search_d || this.state.search_d === '')
+              data.push({
+                  name: object.fl_name,
+              })
         })
 
         const columns = [
@@ -132,7 +128,8 @@ export default class Inventory extends Component {
             ...this.state,
             columns: columns,
             data: data,
-            mode: '3'
+            mode: '3',
+            banks: banks
         })
     }
 
@@ -165,6 +162,8 @@ export default class Inventory extends Component {
 
     render() {
         return (
+          <>
+            <NavBar ddlist={this.state.banks} update={async bank => {await this.updateSearch({...this.state, search_d: bank})}}/>
             <Card style={{ backgroundColor: 'rgb(226, 226, 226)', padding: '10px' }}>
                 <Row>
                     <Col xs="5">
@@ -184,7 +183,7 @@ export default class Inventory extends Component {
                     </Card>
                 </Card>
             </Card>
+          </>
         );
     }
 }
-

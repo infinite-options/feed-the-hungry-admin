@@ -3,6 +3,7 @@ import { Row, Col, Card, Dropdown, DropdownButton, ToggleButton, ToggleButtonGro
 import Charts from './Charts'
 import Table from './Table'
 import Filter from './Filter'
+import NavBar from './NavBar'
 import axios from 'axios'
 
 export default class Orders extends Component {
@@ -18,7 +19,8 @@ export default class Orders extends Component {
             title: '',
             xaxis: '',
             yaxis: '',
-            graph: ''
+            graph: '',
+            banks: []
         }
     }
 
@@ -72,9 +74,11 @@ export default class Orders extends Component {
 
     render() {
         return (
-            <Card style={{ backgroundColor: 'rgb(226, 226, 226)', padding: '10px' }}>
+          <>
+            <NavBar ddlist={this.state.banks} update={async bank => {await this.updateSearch({...this.state, search_d: bank})}}/>
+              <Card style={{ backgroundColor: 'rgb(226, 226, 226)', padding: '10px' }}>
                 <Row>
-                    <Filter update={this.updateSearch} />
+                    <Filter ddlist={[]} update={this.updateSearch} />
                 </Row>
                 <Card style={{ padding: '10px' }}>
                     <Card>
@@ -82,7 +86,7 @@ export default class Orders extends Component {
                     </Card>
                 </Card>
             </Card>
+          </>
         );
     }
 }
-

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Row, Col, Card, Dropdown, DropdownButton, ToggleButton, ToggleButtonGroup } from 'react-bootstrap'
 import Charts from './Charts'
 import Filter from './Filter'
+import NavBar from './NavBar'
 import axios from 'axios'
 
 export default class Customer extends Component {
@@ -17,7 +18,8 @@ export default class Customer extends Component {
             title: '',
             xaxis: '',
             yaxis: '',
-            graph: ''
+            graph: '',
+            banks: []
         }
     }
 
@@ -31,6 +33,7 @@ export default class Customer extends Component {
         var xaxis = []
         var data = []
         var dict = {}
+        var banks = []
         await axios.get(`${this.state.base}customervalue`)
             .then(response => {
                 resp = response.data.result.result
@@ -39,7 +42,9 @@ export default class Customer extends Component {
             .catch(error => console.log(error)
             )
         resp.map(object => {
+          if (object.fb_name === this.state.search_d || this.state.search_d === '')
             object.ctm_id in dict ? dict[object.ctm_id] += object.Total_Value : dict[object.ctm_id] = object.Total_Value
+          if (!banks.includes(object.fb_name)) banks.push(object.fb_name)
         })
 
         for (const [key, value] of Object.entries(dict)) {
@@ -53,7 +58,8 @@ export default class Customer extends Component {
             xaxis: xaxis,
             yaxis: 'Value',
             title: 'Total Orders',
-            graph: 'bar'
+            graph: 'bar',
+            banks: banks
         })
     }
 
@@ -64,11 +70,14 @@ export default class Customer extends Component {
             search_d: state.search_d,
             search_f: state.search_f,
         })
+        this.customervalue()
     }
 
 
     render() {
         return (
+          <>
+            <NavBar ddlist={this.state.banks} update={async bank => {await this.updateSearch({...this.state, search_d: bank})}}/>
             <Card style={{ backgroundColor: 'rgb(226, 226, 226)', padding: '10px' }}>
                 <Card style={{ padding: '10px' }}>
                     <Card>
@@ -76,7 +85,7 @@ export default class Customer extends Component {
                     </Card>
                 </Card>
             </Card>
+          </>
         );
     }
 }
-

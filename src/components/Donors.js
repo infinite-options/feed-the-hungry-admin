@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Row, Col, Card, Dropdown, DropdownButton, ToggleButton, ToggleButtonGroup } from 'react-bootstrap'
+import NavBar from './NavBar'
 import Charts from './Charts'
 import Filter from './Filter'
 import axios from 'axios'
@@ -21,7 +22,8 @@ export default class Donors extends Component {
             search_st: new Date('2016-01-01'),
             search_et: new Date(),
             mode: '1',
-            dd: 'byname'
+            dd: 'byname',
+            banks: []
         }
     }
 
@@ -45,6 +47,8 @@ export default class Donors extends Component {
         var resp = []
         var xaxis = []
         var data = []
+        var data2 = []
+        var banks = []
         await axios.get(`${this.state.base}donordonation`)
             .then(response => {
                 resp = response.data.result.result
@@ -57,19 +61,24 @@ export default class Donors extends Component {
         resp.sort((a, b) => (a.totalDonation < b.totalDonation) ? 1 : -1)
 
         resp.map(object => {
-            xaxis.push(object.donor_first_name)
-            data.push(object.totalDonation)
+            if (object.fb_name === this.state.search_d || this.state.search_d === '') {
+              xaxis.push(object.donor_first_name)
+              data.push(object.totalDonation)
+              data2.push(object.total_qty)
+            }
+            if (!banks.includes(object.fb_name)) banks.push(object.fb_name)
         })
 
         this.setState({
             ...this.state,
-            data: data,
+            data: [data, data2],
             xaxis: xaxis,
             yaxis: 'Donation in Rupees',
-            title: 'Total Donations',
-            graph: 'bar',
+            title: 'Donations',
+            graph: 'combo',
             mode: '1',
-            dd: 'byname'
+            dd: 'byname',
+            banks: banks
         })
     }
 
@@ -77,6 +86,8 @@ export default class Donors extends Component {
         var resp = []
         var xaxis = []
         var data = []
+        var data2 = []
+        var banks = []
         await axios.get(`${this.state.base}donordonation`)
             .then(response => {
                 resp = response.data.result.result
@@ -86,23 +97,28 @@ export default class Donors extends Component {
             )
 
         resp = await this.updateDate(resp)
-        
+
         resp.sort((a, b) => (new Date(a.donation_date) > new Date(b.donation_date)) ? 1 : -1)
 
         resp.map(object => {
-            xaxis.push(object['donation_date'].split(" ")[0])
-            data.push(object.totalDonation)
+            if (object.fb_name === this.state.search_d || this.state.search_d === '') {
+              xaxis.push(object['donation_date'].split(" ")[0])
+              data.push(object.totalDonation)
+              data2.push(object.total_qty)
+            }
+            if (!banks.includes(object.fb_name)) banks.push(object.fb_name)
         })
 
         this.setState({
             ...this.state,
-            data: data,
+            data: [data, data2],
             xaxis: xaxis,
             yaxis: 'Donation in Rupees',
-            title: 'Total Donations',
-            graph: 'bar',
+            title: 'Donations',
+            graph: 'combo',
             mode: '1',
-            dd: 'bydate'
+            dd: 'bydate',
+            banks: banks
         })
     }
 
@@ -110,6 +126,7 @@ export default class Donors extends Component {
         var resp = []
         var data = []
         var dict = {}
+        var banks = []
         await axios.get(`${this.state.base}foodtypes`)
             .then(response => {
                 resp = response.data.result.result
@@ -119,7 +136,9 @@ export default class Donors extends Component {
             )
 
         resp.map(object => {
-            object.fl_type in dict ? dict[object.fl_type] += object.total : dict[object.fl_type] = object.total
+            if (object.fb_name === this.state.search_d || this.state.search_d === '')
+              object.fl_type in dict ? dict[object.fl_type] += object.totalDonation : dict[object.fl_type] = object.totalDonation
+            if (!banks.includes(object.fb_name)) banks.push(object.fb_name)
         })
 
 
@@ -137,7 +156,8 @@ export default class Donors extends Component {
             xaxis: '',
             yaxis: '',
             graph: 'pie',
-            mode: '3'
+            mode: '3',
+            banks: banks
         })
     }
 
@@ -145,6 +165,7 @@ export default class Donors extends Component {
         var resp = []
         var data = []
         var dict = {}
+        var banks = []
         await axios.get(`${this.state.base}itemdonations`)
             .then(response => {
                 resp = response.data.result.result
@@ -154,7 +175,9 @@ export default class Donors extends Component {
             )
 
         resp.map(object => {
-            object.fl_name in dict ? dict[object.fl_name] += object.TotalDonation : dict[object.fl_name] = object.TotalDonation
+          if (object.fb_name === this.state.search_d || this.state.search_d === '')
+            object.fl_name in dict ? dict[object.fl_name] += object.totalDonation : dict[object.fl_name] = object.totalDonation
+          if (!banks.includes(object.fb_name)) banks.push(object.fb_name)
         })
 
 
@@ -170,7 +193,8 @@ export default class Donors extends Component {
             data: data,
             title: 'Total Donations by Number of Items',
             graph: 'pie',
-            mode: '2'
+            mode: '2',
+            banks: banks
         })
     }
 
@@ -215,36 +239,38 @@ export default class Donors extends Component {
 
     render() {
         return (
+          <>
+            <NavBar ddlist={this.state.banks} update={async bank => {await this.updateSearch({...this.state, search_d: bank})}}/>
             <Card style={{ backgroundColor: 'rgb(226, 226, 226)', padding: '10px' }}>
                 <Row>
                     <Col xs="5">
                         <ToggleButtonGroup type="radio" name="options" defaultValue={1}>
-                            <ToggleButton value={1} style={{ fontSize: 15 }} onClick={(e) => this.changeMode(e.target.value)}>Donor Donations</ToggleButton>
+                            <ToggleButton value={1} style={{ fontSize: 15 }} onClick={(e) => this.changeMode(e.target.value, this.state.dd)}>Donor Donations</ToggleButton>
                             <ToggleButton value={2} style={{ fontSize: 15 }} onClick={(e) => this.changeMode(e.target.value)}>Item Donations</ToggleButton>
                             <ToggleButton value={3} style={{ fontSize: 15 }} onClick={(e) => this.changeMode(e.target.value)}>Food Types</ToggleButton>
                         </ToggleButtonGroup>
                     </Col>
                 </Row>
                 <Row>
-                    <Filter update={this.updateSearch} ddlist={[]}/>
+                    <Filter update={this.updateSearch}/>
                 </Row>
                 <Card style={{ padding: '10px' }}>
                     <Card>
-                        {this.state.mode === '1'? 
+                        {this.state.mode === '1'?
                         (<Row>
                             <Col xs="12">
-                                <ToggleButtonGroup style={{margin: '5px'}} className="float-right" type="radio" name="options" defaultValue={11}>
-                                    <ToggleButton value={11} style={{ fontSize: 10 }} onClick={(e) => this.changeMode(e.target.value)}>By Name</ToggleButton>
-                                    <ToggleButton value={12} style={{ fontSize: 10 }} onClick={(e) => this.changeMode(e.target.value)}>By Date</ToggleButton>
+                                <ToggleButtonGroup style={{margin: '5px'}} className="float-right" type="radio" name="options" defaultValue={this.state.dd === 'byname' ? 11 : 12}>
+                                    <ToggleButton value={11} style={{ fontSize: 10 }} onClick={(e) => {this.setState({dd: 'byname'}); this.changeMode(e.target.value)}}>By Name</ToggleButton>
+                                    <ToggleButton value={12} style={{ fontSize: 10 }} onClick={(e) => {this.setState({dd: 'bydate'}); this.changeMode(e.target.value)}}>By Date</ToggleButton>
                                 </ToggleButtonGroup>
                             </Col>
                         </Row>) : (<div></div>)}
                             <Charts data={this.state.data} title={this.state.title} xaxis={this.state.xaxis} yaxis={this.state.yaxis} graph={this.state.graph} />
-                        
+
                     </Card>
                 </Card>
             </Card>
+          </>
         );
     }
 }
-
