@@ -17,6 +17,9 @@ class App extends Component {
             <Route exact path="/">
               <Redirect to="/donors"/>
             </Route>
+            <Route exact path="/feed-the-hungry-admin">
+              <Redirect to="/donors"/>
+            </Route>
             <Route exact path="/donors" component={Donors} />
             <Route exact path="/orders" component={Orders} />
             <Route exact path="/inventory" component={Inventory} />

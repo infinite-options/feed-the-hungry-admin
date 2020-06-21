@@ -34,6 +34,7 @@ export default class Orders extends Component {
         var xaxis = []
         var data = []
         var dict = {}
+        var banks = []
         await axios.get(`${this.state.base}deliveries`)
             .then(response => {
                 resp = response.data.result.result
@@ -42,9 +43,12 @@ export default class Orders extends Component {
             .catch(error => console.log(error)
             )
         resp.map(object => {
-            let temp = new Date(object.delivery_date)
-            console.log(temp.getMonth());
-            temp.getMonth() in dict ? dict[temp.getMonth()] += 1 : dict[temp.getMonth()] = 1
+            if (object.fb_name === this.state.search_d || this.state.search_d === '') {
+              let temp = new Date(object.delivery_date)
+              console.log(temp.getMonth());
+              temp.getMonth() in dict ? dict[temp.getMonth()] += 1 : dict[temp.getMonth()] = 1
+            }
+            if (!banks.includes(object.fb_name)) banks.push(object.fb_name)
         })
         const yearmap = {1 : 'Jan', 2: 'Feb',3:'Mar',4:'Apr',5:'May',6:'June',7:'July',8:'Aug',9:'Sep',10:'Oct',11:'Nov',12:'Dec'}
         for (const [key, value] of Object.entries(dict)) {
@@ -58,7 +62,8 @@ export default class Orders extends Component {
             xaxis: xaxis,
             yaxis: 'No of Orders',
             title: 'Total Orders',
-            graph: 'bar'
+            graph: 'bar',
+            banks: banks
         })
     }
 
@@ -69,6 +74,7 @@ export default class Orders extends Component {
             search_d: state.search_d,
             search_f: state.search_f,
         })
+        this.deliveries()
     }
 
 
