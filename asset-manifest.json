@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/feed-the-hungry-admin/static/css/main.25828032.chunk.css",
-    "main.js": "/feed-the-hungry-admin/static/js/main.77ee3331.chunk.js",
-    "main.js.map": "/feed-the-hungry-admin/static/js/main.77ee3331.chunk.js.map",
+    "main.js": "/feed-the-hungry-admin/static/js/main.0c0308a1.chunk.js",
+    "main.js.map": "/feed-the-hungry-admin/static/js/main.0c0308a1.chunk.js.map",
     "runtime-main.js": "/feed-the-hungry-admin/static/js/runtime-main.4524e3c1.js",
     "runtime-main.js.map": "/feed-the-hungry-admin/static/js/runtime-main.4524e3c1.js.map",
     "static/css/2.daf8c292.chunk.css": "/feed-the-hungry-admin/static/css/2.daf8c292.chunk.css",
     "static/js/2.d027b34a.chunk.js": "/feed-the-hungry-admin/static/js/2.d027b34a.chunk.js",
     "static/js/2.d027b34a.chunk.js.map": "/feed-the-hungry-admin/static/js/2.d027b34a.chunk.js.map",
     "index.html": "/feed-the-hungry-admin/index.html",
-    "precache-manifest.9ea41607b147e3f11382542b73ebd682.js": "/feed-the-hungry-admin/precache-manifest.9ea41607b147e3f11382542b73ebd682.js",
+    "precache-manifest.920becf24ce2640a8ecec4bd6522405e.js": "/feed-the-hungry-admin/precache-manifest.920becf24ce2640a8ecec4bd6522405e.js",
     "service-worker.js": "/feed-the-hungry-admin/service-worker.js",
     "static/css/2.daf8c292.chunk.css.map": "/feed-the-hungry-admin/static/css/2.daf8c292.chunk.css.map",
     "static/css/main.25828032.chunk.css.map": "/feed-the-hungry-admin/static/css/main.25828032.chunk.css.map",
@@ -20,6 +20,6 @@
     "static/css/2.daf8c292.chunk.css",
     "static/js/2.d027b34a.chunk.js",
     "static/css/main.25828032.chunk.css",
-    "static/js/main.77ee3331.chunk.js"
+    "static/js/main.0c0308a1.chunk.js"
   ]
 }
