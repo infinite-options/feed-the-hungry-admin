@@ -99,6 +99,21 @@ export default class Charts extends Component {
                   xAxis: {
                     categories: this.props.xaxis
                   },
+                  yAxis: [{
+                    min: 0,
+                    title: {
+                      text: this.props.yaxis[0]
+                    },
+                    labels: {
+                      format: '${value}'
+                    }
+                  }, {
+                    min: 0,
+                    title: {
+                      text: this.props.yaxis[1]
+                    },
+                    opposite: true
+                  }],
                   series: [{
                     type: 'bar',
                     data: this.props.data[0],
@@ -116,7 +131,8 @@ export default class Charts extends Component {
                     },
                     marker: {
                       symbol: 'circle'
-                    }
+                    },
+                    yAxis: 1
                   }]
                 }
                 break;
