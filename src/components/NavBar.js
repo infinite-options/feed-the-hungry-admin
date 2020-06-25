@@ -12,16 +12,24 @@ class NavBar extends Component {
     render() {
         return (
             <div>
-                <Navbar bg="dark" variant="dark" className="d-flex p-2 bd-highlight" >
-                    <Navbar>
-                        <Navbar.Brand href="/">
-                            Feed the Hungry
-                        </Navbar.Brand>
-                    </Navbar>
-                    <Form inline style={{ width: '45%' }}>
+                <Navbar bg="dark" variant="dark" className="d-flex justify-content-around p-2 bd-highlight" >
+                    <Navbar.Brand href="/">
+                        Feed the Hungry
+                    </Navbar.Brand>
+                    <Form inline>
                         <FormControl type="text" placeholder="Search" className="mr-sm-2" />
                         <Button variant="outline-light">Search</Button>
                     </Form>
+                    <DropdownButton id="dropdown-basic-button" title={this.search_d || 'All Banks'} variant="outline-secondary" size='md' drop='left'>
+                        <Dropdown.Item onClick={() => {this.search_d = ''; this.props.update('')}}>All</Dropdown.Item>
+                        {this.props.ddlist.map(object => {
+                            return (
+                                <Dropdown.Item onClick={() => {this.search_d = object; this.props.update(object)}}>{object}</Dropdown.Item>
+                            )
+                        })}
+                    </DropdownButton>
+                  </Navbar>
+                  <Navbar bg="dark" variant="dark">
                     <Nav className="" >
                         <Nav>
                             <Link to="/donors" className="nav-link">
@@ -38,19 +46,6 @@ class NavBar extends Component {
                                 Inventory
                             </Link>
                         </Nav>
-                        <Nav>
-                            <Link to="/customers" className="nav-link">
-                                Customers
-                            </Link>
-                        </Nav>
-                        <DropdownButton id="dropdown-basic-button" title={this.search_d || 'All Banks'} variant="outline-secondary" size='md' drop='left'>
-                            <Dropdown.Item onClick={() => {this.search_d = ''; this.props.update('')}}>All</Dropdown.Item>
-                            {this.props.ddlist.map(object => {
-                                return (
-                                    <Dropdown.Item onClick={() => {this.search_d = object; this.props.update(object)}}>{object}</Dropdown.Item>
-                                )
-                            })}
-                        </DropdownButton>
                     </Nav>
                 </Navbar>
             </div>

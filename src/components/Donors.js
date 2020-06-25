@@ -46,6 +46,7 @@ export default class Donors extends Component {
     donordonationbyname = async () => {
         var resp = []
         var xaxis = []
+        var dict = {}
         var data = []
         var data2 = []
         var banks = []
@@ -58,21 +59,31 @@ export default class Donors extends Component {
             )
 
         resp = await this.updateDate(resp)
-        resp.sort((a, b) => (a.totalDonation < b.totalDonation) ? 1 : -1)
+        resp.sort((a, b) => (a.donor_first_name < b.donor_first_name) ? -1 : 1)
 
-        resp.map(object => {
+        resp.forEach(object => {
             if (object.fb_name === this.state.search_d || this.state.search_d === '') {
-              xaxis.push(object.donor_first_name)
-              data.push(object.totalDonation)
-              data2.push(object.total_qty)
+                let name = `${object.donor_first_name} ${object.donor_last_name}`
+                if (name in dict) {
+                  dict[name][0] += object.totalDonation
+                  dict[name][1] += object.total_qty
+                } else {
+                  dict[name] = [object.totalDonation, object.total_qty]
+                }
             }
             if (!banks.includes(object.fb_name)) banks.push(object.fb_name)
         })
 
+        for (const [key, val] of Object.entries(dict)) {
+          xaxis.push(key)
+          data.push(val[0])
+          data2.push(val[1])
+        }
+
         this.setState({
             ...this.state,
             data: [data, data2],
-            xaxis: xaxis,
+            xaxis: {categories: xaxis},
             yaxis: ['Donation Value', 'Quantity Donated'],
             title: 'Donations',
             graph: 'combo',
@@ -85,6 +96,7 @@ export default class Donors extends Component {
     donordonationbydate = async () => {
         var resp = []
         var xaxis = []
+        var dict = {}
         var data = []
         var data2 = []
         var banks = []
@@ -97,22 +109,31 @@ export default class Donors extends Component {
             )
 
         resp = await this.updateDate(resp)
+                resp.sort((a, b) => (new Date(a.donation_date) < new Date(b.donation_date)) ? -1 : 1)
 
-        resp.sort((a, b) => (new Date(a.donation_date) > new Date(b.donation_date)) ? 1 : -1)
-
-        resp.map(object => {
+        resp.forEach(object => {
             if (object.fb_name === this.state.search_d || this.state.search_d === '') {
-              xaxis.push(object['donation_date'].split(" ")[0])
-              data.push(object.totalDonation)
-              data2.push(object.total_qty)
+                let date = object.donation_date.split(' ')[0]
+                if (date in dict) {
+                  dict[date][0] += object.totalDonation
+                  dict[date][1] += object.total_qty
+                } else {
+                  dict[date] = [object.totalDonation, object.total_qty]
+                }
             }
             if (!banks.includes(object.fb_name)) banks.push(object.fb_name)
         })
 
+        for (const [key, val] of Object.entries(dict)) {
+          xaxis.push(key)
+          data.push(val[0])
+          data2.push(val[1])
+        }
+
         this.setState({
             ...this.state,
             data: [data, data2],
-            xaxis: xaxis,
+            xaxis: {categories: xaxis},
             yaxis: ['Donation Value', 'Quantity Donated'],
             title: 'Donations',
             graph: 'combo',

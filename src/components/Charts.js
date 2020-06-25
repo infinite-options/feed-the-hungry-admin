@@ -21,9 +21,7 @@ export default class Charts extends Component {
                     title: {
                         text: this.props.title
                     },
-                    xAxis: {
-                        categories: this.props.xaxis
-                    },
+                    xAxis: this.props.xaxis,
                     yAxis: {
                         min: 0,
                         title: {
@@ -96,9 +94,7 @@ export default class Charts extends Component {
                   title: {
                     text: this.props.title
                   },
-                  xAxis: {
-                    categories: this.props.xaxis
-                  },
+                  xAxis: this.props.xaxis,
                   yAxis: [{
                     min: 0,
                     title: {
@@ -117,14 +113,17 @@ export default class Charts extends Component {
                   series: [{
                     type: 'bar',
                     data: this.props.data[0],
-                    name: 'Total Donation',
-                    showInLegend: true,
-                    colorByPoint: false
+                    showInLegend: false,
+                    name: 'Value',
+                    colorByPoint: false,
+                    tooltip: {
+                      pointFormat: '{series.name}: <b>${point.y}</b>'
+                    },
                   }, {
                     type: 'scatter',
                     data: this.props.data[1],
-                    name: 'Total Quantity',
-                    showInLegend: true,
+                    showInLegend: false,
+                    name: 'Quantity',
                     color: 'black',
                     tooltip: {
                       pointFormat: '<b>{point.y}</b>'
