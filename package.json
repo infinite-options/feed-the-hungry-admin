@@ -2,7 +2,7 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://infinte-options.github.io/feed-the-hungry-admin",
+  "homepage": "http://infinite-options.github.io/feed-the-hungry-admin",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
