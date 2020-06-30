@@ -76,7 +76,7 @@ export default class Donors extends Component {
 
         for (const [key, val] of Object.entries(dict)) {
           xaxis.push(key)
-          data.push(val[0])
+          data.push(parseFloat(val[0].toFixed(2)))
           data2.push(val[1])
         }
 
@@ -126,7 +126,7 @@ export default class Donors extends Component {
 
         for (const [key, val] of Object.entries(dict)) {
           xaxis.push(key)
-          data.push(val[0])
+          data.push(parseFloat(val[0].toFixed(2)))
           data2.push(val[1])
         }
 

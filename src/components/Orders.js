@@ -119,11 +119,13 @@ export default class Orders extends Component {
       var xaxis = []
       this.state.orders.forEach(order => {
           if (order.fb_name === this.state.search_d || this.state.search_d === '') {
-              if (order.delivery_date in dict) {
-                dict[order.delivery_date][0] += order.Total_Value
-                dict[order.delivery_date][1] += order.Total_Items
+              let date = order.order_date.split(' ')[0]
+              // let date = order.delivery_date
+              if (date in dict) {
+                dict[date][0] += order.Total_Value
+                dict[date][1] += order.Total_Items
               } else {
-                dict[order.delivery_date] = [order.Total_Value, order.Total_Items]
+                dict[date] = [order.Total_Value, order.Total_Items]
               }
           }
       })
